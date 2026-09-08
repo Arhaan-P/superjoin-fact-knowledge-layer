@@ -2,6 +2,7 @@ fastapi>=0.115.0
 uvicorn
 python-multipart
 streamlit
+requests
 pymupdf
 google-genai
 python-dotenv

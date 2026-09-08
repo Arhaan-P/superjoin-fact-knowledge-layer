@@ -1,4 +1,17 @@
-storage/
+storage/*
+# Pre-built knowledge store for all 6 starter documents is committed on purpose,
+# so a fresh clone works without API keys just to browse/evaluate (per the brief's
+# "include enough sample output... to evaluate without needing your account").
+# New ingests via POST /ingest write into storage/facts/<document_id>.json, which
+# stays gitignored (storage/* above already covers it -- no separate rule needed).
+!storage/sample_facts.json
+!storage/facts_annual_report_fy24.json
+!storage/facts_economic_survey.json
+!storage/facts_rbi_annual_report.json
+!storage/facts_imf_article_iv.json
+!storage/fact_embeddings.json
+!storage/relationships.db
+
 .env
 .env.*
 !.env.example
@@ -19,3 +32,5 @@ venv/
 .idea/
 .claude/
 .playwright-mcp/
+
+VIDEO_SCRIPT.md

@@ -1,0 +1,1212 @@
+{
+  "model": "gemini-3.5-flash",
+  "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+  "fact_count": 64,
+  "facts": [
+    {
+      "fact_id": "6c0eded6-35c7-4040-a9cb-78c71813c5b5",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 1,
+      "source_quote": "Scrip Code: 543529",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Scrip Code",
+      "value": "543529",
+      "unit": null,
+      "time_period": null,
+      "scope": "BSE Limited",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "7997f871-aa9d-4d8a-b464-c8a5d1c485c3",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 5,
+      "source_quote": "FY24 EBITDA increased by Rs. 578 Cr to Rs. 127 Cr from Rs. (452 Cr) in FY23",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "EBITDA",
+      "value": "127",
+      "unit": "Rs. Cr",
+      "time_period": "FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "increase": "Rs. 578 Cr",
+        "FY23_value": "Rs. (452 Cr)"
+      }
+    },
+    {
+      "fact_id": "f7e75024-799a-4296-9b11-261c01d78f39",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 5,
+      "source_quote": "PAT loss reduced by Rs. 759 Cr from Rs. (1,008 Cr) in FY23",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "PAT loss reduction",
+      "value": "759",
+      "unit": "Rs. Cr",
+      "time_period": "FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "FY23_PAT_loss": "Rs. (1,008 Cr)"
+      }
+    },
+    {
+      "fact_id": "fae15ada-5db5-43cc-b3d9-49c5a6db13b9",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 5,
+      "source_quote": "PTL: 30%+ YoY growth",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "PTL YoY growth",
+      "value": "30%+",
+      "unit": null,
+      "time_period": "FY24",
+      "scope": "PTL",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "ba0cdd8d-ee98-49f8-9d65-e05593bf3722",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 5,
+      "source_quote": "TL: 40% YoY revenue growth",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "TL YoY revenue growth",
+      "value": "40%",
+      "unit": null,
+      "time_period": "FY24",
+      "scope": "TL",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "4a0c46ab-2f51-4263-b02e-f92575ad5c4b",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 5,
+      "source_quote": "reduction in NWC days from 38 to 31 days",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "NWC days",
+      "value": "31",
+      "unit": "days",
+      "time_period": "FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "FY23_value": "38 days"
+      }
+    },
+    {
+      "fact_id": "e149ced2-2a1c-4020-94a2-555cdb2cc2c5",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 5,
+      "source_quote": "SCS: Doubled service EBITDA profitability over FY23",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Service EBITDA profitability",
+      "value": "Doubled",
+      "unit": null,
+      "time_period": "FY24",
+      "scope": "SCS",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "573533eb-b41c-47e8-8020-ddd07ccf787f",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 6,
+      "source_quote": "₹8,142 Cr\nFY24 revenue from services",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Revenue from services",
+      "value": "8,142",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "YoY_growth": "12.7%"
+      }
+    },
+    {
+      "fact_id": "11b3311c-a8d0-4b2b-880f-0a4484bc1515",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 6,
+      "source_quote": "740 Mn\nExpress parcel shipments in FY24\nYoY: 11.5%",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Express parcel shipments",
+      "value": "740",
+      "unit": "Mn",
+      "time_period": "FY24",
+      "scope": "Express Parcel",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "YoY_growth": "11.5%"
+      }
+    },
+    {
+      "fact_id": "dd7067e8-decf-40c0-87a8-1b5748215cbd",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 6,
+      "source_quote": "1.4 Mn Tons\nPTL freight tonnage in FY24\nYoY: 29.8%",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "PTL freight tonnage",
+      "value": "1.4",
+      "unit": "Mn Tons",
+      "time_period": "FY24",
+      "scope": "PTL",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "YoY_growth": "29.8%"
+      }
+    },
+    {
+      "fact_id": "a9058055-5e89-4303-a2f0-2470e2e45e1a",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 6,
+      "source_quote": "₹127Cr / 1.6%\nEBITDA / EBITDA margin\nFY23: ₹(452) Cr / (6.3%)",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "EBITDA",
+      "value": "127",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "EBITDA_margin": "1.6%",
+        "FY23_EBITDA": "₹(452) Cr",
+        "FY23_EBITDA_margin": "(6.3%)"
+      }
+    },
+    {
+      "fact_id": "2a42d0f5-c867-407c-8f61-c01fb9088c21",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 6,
+      "source_quote": "₹76Cr / 0.9%\nAdj. EBITDA / Adj. EBITDA margin\nFY23: ₹(404) Cr / (5.6%)",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Adj. EBITDA",
+      "value": "76",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "Adj_EBITDA_margin": "0.9%",
+        "FY23_Adj_EBITDA": "₹(404) Cr",
+        "FY23_Adj_EBITDA_margin": "(5.6%)"
+      }
+    },
+    {
+      "fact_id": "c10b6c53-2276-4e56-94c5-41048a8ca2b5",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 6,
+      "source_quote": "2.8 Bn+ \nExpress parcel shipments since inception",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Express parcel shipments since inception",
+      "value": "2.8 Bn+",
+      "unit": null,
+      "time_period": "since inception",
+      "scope": "Express Parcel",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "c54ea4b0-1208-4288-ab0f-34d0212eba3b",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 6,
+      "source_quote": "4.8 Mn+ Tons(3) \nPTL freight tonnage since inception",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "PTL freight tonnage since inception",
+      "value": "4.8 Mn+",
+      "unit": "Tons",
+      "time_period": "since inception",
+      "scope": "PTL",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "cee1f334-b73b-4880-9675-0e8ee76f99f3",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 7,
+      "source_quote": "₹2,076 Cr\nQ4 FY24 revenue from services",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Revenue from services",
+      "value": "2,076",
+      "unit": "₹ Cr",
+      "time_period": "Q4 FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "YoY_growth": "11.6%",
+        "QoQ_growth": "(5.4%)"
+      }
+    },
+    {
+      "fact_id": "0e36e057-704d-42bc-a865-8b2565e390e1",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 7,
+      "source_quote": "176 Mn\nExpress parcel shipments in Q4 FY24\nYoY: (2.2%) / QoQ: (12.8%)",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Express parcel shipments",
+      "value": "176",
+      "unit": "Mn",
+      "time_period": "Q4 FY24",
+      "scope": "Express Parcel",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "YoY_growth": "(2.2%)",
+        "QoQ_growth": "(12.8%)"
+      }
+    },
+    {
+      "fact_id": "f3a1edf1-c24b-4aca-a8bb-b4c9e779b654",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 7,
+      "source_quote": "384K Tons\nPTL freight tonnage in Q4 FY24\nYoY: 20.8% / QoQ: 8.6%",
+      "extracted_at": "2026-09-07T11:02:51.663240+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "PTL freight tonnage",
+      "value": "384",
+      "unit": "K Tons",
+      "time_period": "Q4 FY24",
+      "scope": "PTL",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "YoY_growth": "20.8%",
+        "QoQ_growth": "8.6%"
+      }
+    },
+    {
+      "fact_id": "4b118895-0eeb-4f25-8240-1d4af2d22bbf",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 7,
+      "source_quote": "₹46Cr / 2.2%\nEBITDA / EBITDA margin\nQ4 FY23: ₹13 Cr / 0.7%\nQ3 FY24: ₹109 Cr / 5.0%",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "EBITDA",
+      "value": "46",
+      "unit": "₹ Cr",
+      "time_period": "Q4 FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "EBITDA_margin": "2.2%",
+        "Q4_FY23_EBITDA": "₹13 Cr",
+        "Q4_FY23_EBITDA_margin": "0.7%",
+        "Q3_FY24_EBITDA": "₹109 Cr",
+        "Q3_FY24_EBITDA_margin": "5.0%"
+      }
+    },
+    {
+      "fact_id": "d07dd0f7-b052-42ff-af32-c5b196bfd20d",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 8,
+      "source_quote": "Q4 FY22\nQ4 FY23\nQ3 FY24\nQ4 FY24\nPin-code reach(1)\n18,074\n18,540\n18,675\n18,793",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Pin-code reach",
+      "value": "18,793",
+      "unit": null,
+      "time_period": "Q4 FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "Q4_FY22": "18,074",
+        "Q4_FY23": "18,540",
+        "Q3_FY24": "18,675"
+      }
+    },
+    {
+      "fact_id": "f745172c-3cf1-453e-a2f6-de719ba2e73a",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 8,
+      "source_quote": "No. of Active Customers(3) \n23,613\n27,253\n30,598\n33,278",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "No. of Active Customers",
+      "value": "33,278",
+      "unit": null,
+      "time_period": null,
+      "scope": null,
+      "confidence": 0.2,
+      "skip_reason": "The column headers indicating the time periods are on separate lines above the row, with other rows in between.",
+      "attributes": {
+        "candidate_values": [
+          "23,613",
+          "27,253",
+          "30,598",
+          "33,278"
+        ]
+      }
+    },
+    {
+      "fact_id": "3218665c-1476-49b2-96f3-333dc75059f9",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 8,
+      "source_quote": "Infrastructure (in million sq ft.)\n18.15\n17.99\n19.24\n18.82",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Infrastructure",
+      "value": "18.82",
+      "unit": "million sq ft.",
+      "time_period": null,
+      "scope": null,
+      "confidence": 0.2,
+      "skip_reason": "The column headers indicating the time periods are on separate lines above the row, with other rows in between.",
+      "attributes": {
+        "candidate_values": [
+          "18.15",
+          "17.99",
+          "19.24",
+          "18.82"
+        ]
+      }
+    },
+    {
+      "fact_id": "87f52c4c-5117-4c23-85df-a6fb8f59c134",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 8,
+      "source_quote": "Team size(4)\n60,373\n57,307\n63,144\n63,713",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Team size",
+      "value": "63,713",
+      "unit": null,
+      "time_period": null,
+      "scope": null,
+      "confidence": 0.2,
+      "skip_reason": "The column headers indicating the time periods are on separate lines above the row, with other rows in between.",
+      "attributes": {
+        "candidate_values": [
+          "60,373",
+          "57,307",
+          "63,144",
+          "63,713"
+        ]
+      }
+    },
+    {
+      "fact_id": "9b4f05b2-fb4f-4829-bfc2-78abb51f3343",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 8,
+      "source_quote": "Fleet size – daily average\n9,120\n11,105\n13,688\n15,065",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery Limited",
+      "metric": "Fleet size – daily average",
+      "value": "15,065",
+      "unit": null,
+      "time_period": null,
+      "scope": null,
+      "confidence": 0.2,
+      "skip_reason": "The column headers indicating the time periods are on separate lines above the row, with other rows in between.",
+      "attributes": {
+        "candidate_values": [
+          "9,120",
+          "11,105",
+          "13,688",
+          "15,065"
+        ]
+      }
+    },
+    {
+      "fact_id": "cf0e6b9f-76d7-446f-bfdc-8213a9608fd3",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 14,
+      "source_quote": "Q1 FY23\nQ2 FY23\nQ3 FY23\nQ4 FY23\nQ1 FY24\nQ2 FY24\nQ3 FY24\nQ4 FY24\nFY23\nFY24\nRevenue from customers(1)\n1,746\n1,796\n1,824\n1,860\n1,930\n1,942\n2,194\n2,076\n7,225\n8,142",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Revenue from customers",
+      "value": "8,142",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": "Total",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "note": "Includes revenue from services and traded goods"
+      }
+    },
+    {
+      "fact_id": "13486d86-3db9-4569-8c3e-9a75c449a861",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 14,
+      "source_quote": "Q1 FY23\nQ2 FY23\nQ3 FY23\nQ4 FY23\nQ1 FY24\nQ2 FY24\nQ3 FY24\nQ4 FY24\nFY23\nFY24\nRevenue from customers(1)\n1,746\n1,796\n1,824\n1,860\n1,930\n1,942\n2,194\n2,076\n7,225\n8,142",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Revenue from customers",
+      "value": "2,076",
+      "unit": "₹ Cr",
+      "time_period": "Q4 FY24",
+      "scope": "Total",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {
+        "note": "Includes revenue from services and traded goods"
+      }
+    },
+    {
+      "fact_id": "8ad0fc3c-767b-4e62-ae66-fbb1b4084629",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 14,
+      "source_quote": "Q1 FY23\nQ2 FY23\nQ3 FY23\nQ4 FY23\nQ1 FY24\nQ2 FY24\nQ3 FY24\nQ4 FY24\nFY23\nFY24\nRevenue from customers(1)\n1,746\n1,796\n1,824\n1,860\n1,930\n1,942\n2,194\n2,076\n7,225\n8,142\nService EBITDA\n(6)\n86\n139\n205\n196\n201\n306\n238\n422\n941",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Service EBITDA",
+      "value": "941",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": "Total",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "8516d646-e617-485b-9f0c-0e37e48f8a1b",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 15,
+      "source_quote": "Q1 FY23\nQ2 FY23\nQ3 FY23\nQ4 FY23\nQ1 FY24\nQ2 FY24\nQ3 FY24\nQ4 FY24\nFY23\nFY24\nTotal Service EBITDA\n(6)\n86\n139\n205\n196\n201\n306\n238\n422\n941\n% margin\n(0.3%)\n4.8%\n7.6%\n11.0%\n10.2%\n10.4%\n14.0%\n11.5%\n5.8%\n11.6%\nExpress Parcel\n94\n134\n190\n219\n217\n203\n299\n214\n636\n934",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Express Parcel Service EBITDA",
+      "value": "934",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": "Express Parcel",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "2f735cb1-37c4-4246-a0d2-f183bdb79f11",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 15,
+      "source_quote": "Express Parcel\n94\n134\n190\n219\n217\n203\n299\n214\n636\n934\n% margin\n8.9%\n11.9%\n15.9%\n18.6%\n18.1%\n16.8%\n20.6%\n17.6%\n14.0%\n18.4%",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Express Parcel Service EBITDA margin",
+      "value": "18.4%",
+      "unit": "%",
+      "time_period": "FY24",
+      "scope": "Express Parcel",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "7a2264e8-db81-4601-934d-cfb4748a1e74",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 15,
+      "source_quote": "Part Truckload\n(111)\n(52)\n(48)\n(26)\n(30)\n(18)\n(7)\n9\n(237)\n(46)\n% margin\n(42.8%)\n(17.9%)\n(17.3%)\n(8.0%)\n(8.5%)\n(4.9%)\n(1.8%)\n2.2%\n(20.5%)\n(3.0%)",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Part Truckload Service EBITDA margin",
+      "value": "(3.0%)",
+      "unit": "%",
+      "time_period": "FY24",
+      "scope": "Part Truckload",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "a6a40224-2630-4e83-81b0-c368f419e091",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 15,
+      "source_quote": "Supply Chain Services\n13\n7\n(5)\n10\n12\n14\n13\n14\n25\n53\n% margin\n5.5%\n3.7%\n(2.8%)\n5.4%\n5.9%\n8.5%\n7.3%\n6.0%\n3.2%\n6.8%",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Supply Chain Services EBITDA margin",
+      "value": "6.8%",
+      "unit": "%",
+      "time_period": "FY24",
+      "scope": "Supply Chain Services",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "5a629bed-b2d5-49a7-9a74-4bc9bdc42b11",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 14,
+      "source_quote": "Q1 FY23\nQ2 FY23\nQ3 FY23\nQ4 FY23\nQ1 FY24\nQ2 FY24\nQ3 FY24\nQ4 FY24\nFY23\nFY24\nRevenue from customers(1)\n1,746\n1,796\n1,824\n1,860\n1,930\n1,942\n2,194\n2,076\n7,225\n8,142\nService EBITDA\n(6)\n86\n139\n205\n196\n201\n306\n238\n422\n941\nService EBITDA margin\n(0.3%)\n4.8%\n7.6%\n11.0%\n10.2%\n10.4%\n14.0%\n11.5%\n5.8%\n11.6%\nLess: Corporate overheads\n211\n210\n206\n200\n221\n214\n214\n217\n826\n866\nCorp. overheads (% of \nrevenue)\n12.1%\n11.7%\n11.3%\n10.7%\n11.4%\n11.0%\n9.7%\n10.5%\n11.4%\n10.6%\nAdjusted EBITDA\n(217)\n(125)\n(67)\n6\n(25)\n(13)\n92\n21\n(404)\n76",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Adjusted EBITDA",
+      "value": "76",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": "Total",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "cb758565-a385-4436-8842-9abc1a6e911b",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 14,
+      "source_quote": "Adjusted EBITDA\n(217)\n(125)\n(67)\n6\n(25)\n(13)\n92\n21\n(404)\n76\nAdjusted EBITDA margin\n(12.5%)\n(7.0%)\n(3.7%)\n0.3%\n(1.3%)\n(0.6%)\n4.2%\n1.0%\n(5.6%)\n0.9%",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Adjusted EBITDA margin",
+      "value": "0.9%",
+      "unit": "%",
+      "time_period": "FY24",
+      "scope": "Total",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "d26b894b-4067-4198-bc53-f964653b13cb",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 15,
+      "source_quote": "Wages\n117\n114\n112\n107\n119\n117\n115\n111\n450\n462",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Wages",
+      "value": "462",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": "Corporate overheads",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "33fd83c8-a689-49c8-8422-27ec229e42ca",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 15,
+      "source_quote": "Marketing\n11\n6\n3\n3\n5\n10\n10\n10\n22\n35",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Marketing",
+      "value": "35",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": "Corporate overheads",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "36b21574-1d70-4c10-9af3-8e9e5123ec71",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 15,
+      "source_quote": "Technology\n44\n44\n43\n39\n43\n44\n45\n44\n170\n176",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Technology",
+      "value": "176",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": "Corporate overheads",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "0682003a-153d-4c51-ae86-1e3a293fcf7e",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 15,
+      "source_quote": "G&A\n40\n46\n48\n50\n53\n43\n43\n52\n185\n192",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "G&A",
+      "value": "192",
+      "unit": "₹ Cr",
+      "time_period": "FY24",
+      "scope": "Corporate overheads",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "21616382-572d-42c1-88e0-6d10126b1867",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 16,
+      "source_quote": "73\n47\n37",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Net Working Capital Days",
+      "value": "37",
+      "unit": "Days",
+      "time_period": null,
+      "scope": "Net Working Capital",
+      "confidence": 0.2,
+      "skip_reason": "The values for Net Working Capital Days are split across different parts of the page and not contiguous with the time periods.",
+      "attributes": {
+        "candidate_values": [
+          "73",
+          "47",
+          "37"
+        ]
+      }
+    },
+    {
+      "fact_id": "4b33ba95-e512-4340-bf82-92d55c4f6837",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 16,
+      "source_quote": "106\n87\n74\n77\n66",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Receivable days",
+      "value": "66",
+      "unit": "Days",
+      "time_period": null,
+      "scope": "Receivable days",
+      "confidence": 0.2,
+      "skip_reason": "The row of values is separated from the time period headers and the row label.",
+      "attributes": {
+        "candidate_values": [
+          "106",
+          "87",
+          "74",
+          "77",
+          "66"
+        ]
+      }
+    },
+    {
+      "fact_id": "ee4e736f-a074-48fb-b043-d3728b573bce",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 16,
+      "source_quote": "33\n40\n37\n39\n35",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Payable days",
+      "value": "35",
+      "unit": "Days",
+      "time_period": null,
+      "scope": "Payable days",
+      "confidence": 0.2,
+      "skip_reason": "The row of values is separated from the time period headers and the row label.",
+      "attributes": {
+        "candidate_values": [
+          "33",
+          "40",
+          "37",
+          "39",
+          "35"
+        ]
+      }
+    },
+    {
+      "fact_id": "fcede56f-0306-4e95-8c4e-5a4e7899d2bb",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 9,
+      "source_quote": "4,191\n4,552\n5,077",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Express Parcel revenue",
+      "value": "5,077",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": "Express Parcel",
+      "confidence": 0.2,
+      "skip_reason": "The row of values is separated from the time period headers and the row label.",
+      "attributes": {
+        "candidate_values": [
+          "4,191",
+          "4,552",
+          "5,077"
+        ]
+      }
+    },
+    {
+      "fact_id": "139b40f4-61ec-4897-84f2-7709ee9f13f5",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 9,
+      "source_quote": "582\n663\n740",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Express Parcel shipments",
+      "value": "740",
+      "unit": "Mn",
+      "time_period": null,
+      "scope": "Express Parcel",
+      "confidence": 0.2,
+      "skip_reason": "The row of values is separated from the time period headers and the row label.",
+      "attributes": {
+        "candidate_values": [
+          "582",
+          "663",
+          "740"
+        ]
+      }
+    },
+    {
+      "fact_id": "5f518028-46d6-4ea0-9bff-7ce16a82d169",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 9,
+      "source_quote": "1,579\n1,101\n1,429",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "PTL freight revenue",
+      "value": "1,579",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": "PTL",
+      "confidence": 0.2,
+      "skip_reason": "The row of values is read out of order due to multi-column layout and is separated from the labels.",
+      "attributes": {
+        "candidate_values": [
+          "1,579",
+          "1,101",
+          "1,429"
+        ]
+      }
+    },
+    {
+      "fact_id": "e14c1a17-e5f5-4ecc-b66f-2c08764dd16e",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 9,
+      "source_quote": "1,705\n1,157\n1,517",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "PTL freight tonnage",
+      "value": "1,705",
+      "unit": "‘000 Tons",
+      "time_period": null,
+      "scope": "PTL",
+      "confidence": 0.2,
+      "skip_reason": "The row of values is read out of order due to multi-column layout and is separated from the labels.",
+      "attributes": {
+        "candidate_values": [
+          "1,705",
+          "1,157",
+          "1,517"
+        ]
+      }
+    },
+    {
+      "fact_id": "4c23f096-6fd7-44e8-ae4c-10ee8c383209",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 19,
+      "source_quote": "Total cash balance: ₹ 5,444 Cr",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Total cash balance",
+      "value": "5,444",
+      "unit": "₹ Cr",
+      "time_period": "Mar '24",
+      "scope": null,
+      "confidence": 0.9,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "29a2d3bb-bdec-4e2a-94c8-a3bd5be7fd16",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 22,
+      "source_quote": "The CWIP at the end of FY24 is ₹29 Cr",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "CWIP",
+      "value": "29",
+      "unit": "₹ Cr",
+      "time_period": "at the end of FY24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "872049b7-fb59-4acd-b87d-62e731dbf68c",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 19,
+      "source_quote": "Unbilled receivables amounting to ₹581 crores, pertaining to Mar ‘23 reclassified as trade receivables due to a change in accounting",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Unbilled receivables reclassified as trade receivables",
+      "value": "581",
+      "unit": "crores",
+      "time_period": "Mar '23",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "b2e6da0c-0b61-4e10-9bbd-02cacc8c1bfa",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 20,
+      "source_quote": "excludes ₹145 Cr of accrued interest In Mar ‘24",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "accrued interest excluded",
+      "value": "145",
+      "unit": "₹ Cr",
+      "time_period": "Mar '24",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "996586cc-4567-44bc-aa02-5a7c85aa9e34",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 17,
+      "source_quote": "Employee benefit expense excl. share based payments\n284\n306\n308\n0.8%\n8.4%\n1,111\n1,211\n9.0%",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Employee benefit expense excl. share based payments",
+      "value": "1,211",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": null,
+      "confidence": 0.2,
+      "skip_reason": "row label and value are on separate lines with no adjacent context tying them to a specific quarter",
+      "attributes": {
+        "candidate_values": [
+          "284",
+          "306",
+          "308",
+          "0.8%",
+          "8.4%",
+          "1,111",
+          "1,211",
+          "9.0%"
+        ]
+      }
+    },
+    {
+      "fact_id": "7e316299-217f-4b8a-aed9-9827a2c89532",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 21,
+      "source_quote": "Net cash from / (used in) operating activities\n(30)\n472",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Net cash from / (used in) operating activities",
+      "value": "472",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": null,
+      "confidence": 0.2,
+      "skip_reason": "row label and value are on separate lines with no adjacent context tying them to a specific fiscal year",
+      "attributes": {
+        "candidate_values": [
+          "(30)",
+          "472"
+        ]
+      }
+    },
+    {
+      "fact_id": "574bf2ad-02f0-4c86-9ab9-0d401f7166eb",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 24,
+      "source_quote": "Line haul expenses\n724\n616\n696\n708\n2,517\n2,684",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Line haul expenses",
+      "value": "2,684",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": null,
+      "confidence": 0.2,
+      "skip_reason": "row label and value are on separate lines with no adjacent context tying them to a specific quarter or fiscal year",
+      "attributes": {
+        "candidate_values": [
+          "724",
+          "616",
+          "696",
+          "708",
+          "2,517",
+          "2,684"
+        ]
+      }
+    },
+    {
+      "fact_id": "758f6639-4ef2-4eff-a569-3c601e72454b",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 22,
+      "source_quote": "~Rs 100 Cr of Capex, which happened in FY22, was planned for FY21",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Capex planned for FY21 but happened in FY22",
+      "value": "100",
+      "unit": "Rs Cr",
+      "time_period": "FY22",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "413d715d-a759-473b-8088-4a4eea0f5cde",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 19,
+      "source_quote": "excludes ₹92 Cr of accrued interest in Mar ‘23",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "accrued interest excluded",
+      "value": "92",
+      "unit": "₹ Cr",
+      "time_period": "Mar '23",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "28a27fc7-7fe5-4eab-9f5e-ab8cf884e1e3",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "ESOPs ungranted, of which\n40,424,975\n5.03%",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "ESOPs ungranted",
+      "value": "40,424,975",
+      "unit": "options",
+      "time_period": "As of March 31, 2024",
+      "scope": "Total",
+      "confidence": 0.9,
+      "skip_reason": null,
+      "attributes": {
+        "percent_of_shares_outstanding_fully_diluted": "5.03%"
+      }
+    },
+    {
+      "fact_id": "006be0f3-5161-42b3-bdbb-bf212e9ab992",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "Time-based ESOPs(4)\n25,364,975\n3.16%",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Time-based ESOPs ungranted",
+      "value": "25,364,975",
+      "unit": "options",
+      "time_period": "As of March 31, 2024",
+      "scope": null,
+      "confidence": 0.9,
+      "skip_reason": null,
+      "attributes": {
+        "percent_of_shares_outstanding_fully_diluted": "3.16%",
+        "vesting_period": "3 to 4 years"
+      }
+    },
+    {
+      "fact_id": "0bc53c2f-bae8-47b2-ba25-6723cc232845",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "Performance-based ESOPs(5)\n15,060,000\n1.87%",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Performance-based ESOPs ungranted",
+      "value": "15,060,000",
+      "unit": "options",
+      "time_period": "As of March 31, 2024",
+      "scope": null,
+      "confidence": 0.9,
+      "skip_reason": null,
+      "attributes": {
+        "percent_of_shares_outstanding_fully_diluted": "1.87%",
+        "unlock_conditions": "three equal tranches upon achieving share prices of ₹800, ₹1,000 and ₹1,200; and vest equally over 2 years thereafter"
+      }
+    },
+    {
+      "fact_id": "43fd785b-b24a-41e3-8ec0-215f425fd916",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "Number of employees holding ESOPs (vested + unvested) : 1,432",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Number of employees holding ESOPs (vested + unvested)",
+      "value": "1,432",
+      "unit": "employees",
+      "time_period": "As of March 31, 2024",
+      "scope": null,
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "fbad7179-2d75-4495-873a-98c2f3a4e9ed",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "FY24\n132\n94",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Estimated P&L charge (non-cash) for ESOPs already granted",
+      "value": "132",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": "FY24",
+      "confidence": 0.2,
+      "skip_reason": "column headers are on separate lines with no adjacent context tying the values to specific option types",
+      "attributes": {
+        "candidate_values": [
+          "132",
+          "94"
+        ]
+      }
+    },
+    {
+      "fact_id": "c12158da-c964-46df-9302-22847d23f266",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "FY25\n90\n40",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Estimated P&L charge (non-cash) for ESOPs already granted",
+      "value": "90",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": "FY25",
+      "confidence": 0.2,
+      "skip_reason": "column headers are on separate lines with no adjacent context tying the values to specific option types",
+      "attributes": {
+        "candidate_values": [
+          "90",
+          "40"
+        ]
+      }
+    },
+    {
+      "fact_id": "719bfa8e-2010-4e75-bc96-f81b2a8842b9",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "FY26\n38\n12",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Estimated P&L charge (non-cash) for ESOPs already granted",
+      "value": "38",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": "FY26",
+      "confidence": 0.2,
+      "skip_reason": "column headers are on separate lines with no adjacent context tying the values to specific option types",
+      "attributes": {
+        "candidate_values": [
+          "38",
+          "12"
+        ]
+      }
+    },
+    {
+      "fact_id": "51919027-4838-4421-9da5-816b89467744",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "FY27\n6\n2",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Estimated P&L charge (non-cash) for ESOPs already granted",
+      "value": "6",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": "FY27",
+      "confidence": 0.2,
+      "skip_reason": "column headers are on separate lines with no adjacent context tying the values to specific option types",
+      "attributes": {
+        "candidate_values": [
+          "6",
+          "2"
+        ]
+      }
+    },
+    {
+      "fact_id": "72087953-f520-48fb-be22-9ba2cde14cd3",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "FY28\n0\n-",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Estimated P&L charge (non-cash) for ESOPs already granted",
+      "value": "0",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": "FY28",
+      "confidence": 0.2,
+      "skip_reason": "column headers are on separate lines with no adjacent context tying the values to specific option types",
+      "attributes": {
+        "candidate_values": [
+          "0",
+          "-"
+        ]
+      }
+    },
+    {
+      "fact_id": "b1ac6c36-36c4-404b-b601-03076647a8f0",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 25,
+      "source_quote": "Total\n266\n147",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "Delhivery",
+      "metric": "Estimated P&L charge (non-cash) for ESOPs already granted",
+      "value": "266",
+      "unit": "₹ Cr",
+      "time_period": null,
+      "scope": "Total",
+      "confidence": 0.2,
+      "skip_reason": "column headers are on separate lines with no adjacent context tying the values to specific option types",
+      "attributes": {
+        "candidate_values": [
+          "266",
+          "147"
+        ]
+      }
+    },
+    {
+      "fact_id": "f787c5bd-17b7-4413-86e4-0e6d78489e9d",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 26,
+      "source_quote": "acquisition of SpotOn Logistics Private Limited on our consolidated financial \nstatements for the year ended March 31, 2022 as if the acquisition occurred on 1st April 2021",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "SpotOn Logistics Private Limited",
+      "metric": "assumed acquisition date for pro forma financials",
+      "value": "1st April 2021",
+      "unit": null,
+      "time_period": "year ended March 31, 2022",
+      "scope": "pro forma consolidated P&L and adjusted EBITDA",
+      "confidence": 0.9,
+      "skip_reason": null,
+      "attributes": {}
+    },
+    {
+      "fact_id": "195952d2-1991-4f0c-8128-33baa7d31a5f",
+      "document_id": "03-delhivery-q4-fy24-earnings-presentation",
+      "page_number": 26,
+      "source_quote": "Report titled “Logistics Market in India” dated April 21, 2022 prepared by RedSeer",
+      "extracted_at": "2026-09-07T11:02:51.664246+00:00",
+      "entity": "RedSeer",
+      "metric": "report date",
+      "value": "April 21, 2022",
+      "unit": null,
+      "time_period": null,
+      "scope": "Logistics Market in India",
+      "confidence": 1.0,
+      "skip_reason": null,
+      "attributes": {}
+    }
+  ]
+}

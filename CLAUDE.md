@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 ## What this project is
-"Fact Knowledge Layer" — Superjoin VIT 2026 Engineering Intern hiring assignment (full spec in `docs/assignment.pdf` and `PRD.md`). Deadline: <2 days. Prioritize a working, explainable prototype over polish.
+"Fact Knowledge Layer" — Superjoin VIT 2026 Engineering Intern hiring assignment (full spec in `docs/assignment.pdf` and `docs/PRD.md`). Deadline: <2 days. Prioritize a working, explainable prototype over polish.
 
 ## Non-negotiables from the assignment
 - No hardcoded facts, filenames, schemas, or document-specific rules. The system will be tested with PDFs it has never seen.
@@ -41,5 +41,5 @@
 
 ## What "done" looks like for submission
 - API/UI accepts a new PDF and returns facts + evidence + relationships with zero code changes.
-- Four required cases demonstrable from the starter dataset (see PRD.md → Demo Script).
+- Four required cases demonstrable from the starter dataset (see docs/PRD.md → Demo Script).
 - README.md with setup, video link, approach, limitations, and AI tools used — this is graded, don't skip it.

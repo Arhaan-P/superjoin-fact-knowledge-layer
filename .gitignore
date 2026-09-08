@@ -17,3 +17,5 @@ venv/
 
 .vscode/
 .idea/
+.claude/
+.playwright-mcp/

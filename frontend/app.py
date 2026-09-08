@@ -81,12 +81,12 @@ def _facts_view() -> None:
 
     st.session_state.setdefault("expanded_facts", set())
 
-    header = st.columns([2.2, 2.6, 1.3, 1.3, 0.7, 1.6, 1])
+    header = st.columns([2.2, 2.4, 1.2, 1.2, 0.9, 1.8, 1])
     for col, label in zip(header, ["Entity", "Metric", "Value", "Period", "Page", "Confidence", ""]):
         col.markdown(f"**{label}**")
 
     for fact in shown:
-        cols = st.columns([2.2, 2.6, 1.3, 1.3, 0.7, 1.6, 1])
+        cols = st.columns([2.2, 2.4, 1.2, 1.2, 0.9, 1.8, 1])
         cols[0].write(fact.get("entity") or "—")
         cols[1].write(fact.get("metric") or "—")
         value_str = f"{fact.get('value')} {fact.get('unit') or ''}".strip()

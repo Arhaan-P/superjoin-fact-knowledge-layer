@@ -16,6 +16,10 @@ PAPER_LINE = "#D8D5C9"
 INK = "#1B1E22"
 INK_SOFT = "#5B6169"
 SEAL = "#A8763A"
+# Distinct from SEAL on purpose -- SEAL is reserved for the "reconciled via
+# context" relation badge; reusing it for the button would make an interactive
+# control look like a semantic status color.
+ACCENT = "#7A4A9E"
 
 RELATION_COLORS = {
     "corroborates": "#3F7856",
@@ -70,6 +74,16 @@ def inject_base_styles() -> str:
 
     .stApp {{
         background: {PAPER};
+        color: {INK};
+    }}
+    [data-testid="stMain"] [data-testid="stMarkdownContainer"] p,
+    [data-testid="stMain"] [data-testid="stMarkdownContainer"] li,
+    [data-testid="stMain"] [data-testid="stHeading"],
+    [data-testid="stMain"] [data-testid="stWidgetLabel"] p,
+    [data-testid="stMain"] [data-testid="stCaptionContainer"],
+    [data-testid="stMain"] [data-testid="stTextInput"] input,
+    [data-testid="stMain"] [data-testid="stSelectbox"] {{
+        color: {INK} !important;
     }}
 
     [data-testid="stHeader"] {{
@@ -136,7 +150,7 @@ def inject_base_styles() -> str:
     }}
 
     div.stButton > button {{
-        background: {SEAL};
+        background: {ACCENT};
         color: #fff;
         border: none;
         border-radius: 3px;
@@ -145,7 +159,7 @@ def inject_base_styles() -> str:
         white-space: nowrap;
     }}
     div.stButton > button:hover {{
-        background: #8F6530;
+        background: #5E3A7D;
         color: #fff;
     }}
 

@@ -9,7 +9,7 @@ The repo ships with a pre-built knowledge store (986 facts, 104+ relationships) 
 Requires Python 3.11+.
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/Arhaan-P/superjoin-fact-knowledge-layer.git
 cd superjoin-fact-knowledge-layer
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
@@ -57,71 +57,56 @@ PDF -> PyMuPDF (page-level text) -> Gemini (batched extraction, page markers)
 
 ### Key decisions
 
-- **Grounding is enforced twice.** The extraction prompt uses explicit `<<<PAGE N>>>` markers so the model can't infer a page number from context, and requires source_quote to be a real contiguous substring. Prompting alone wasn't enough: testing found facts stated at full confidence whose quotes weren't actually on the page. Every fact also passes a mandatory post-hoc check (`verify_grounding.py`'s logic, reused, not reimplemented) that force-demotes anything that fails, regardless of the model's claimed confidence. This caught a real fabrication in production (see Limitations).
-
-- **Candidate matching is cross-document only.** Two facts from the same document that share wording aren't a relationship across documents. Including them risked the judgment model manufacturing a corroboration or contradiction out of an extraction artifact rather than something the source actually said.
-
-- **Facts with `skip_reason` or confidence below 0.5 are excluded from automatic matching.** When a value can't be tied to its context (a table row separated from its header, for example), it's still surfaced, not dropped, but flagged and kept out of comparisons.
-
-- **Multi-provider, multi-key fallback.** Gemini's free-tier daily quota (about 20 requests/day/model, found empirically) was the biggest operational obstacle in this project. The system rotates through a configurable list of Gemini models, then a configurable list of Gemini API keys, then falls back to Groq for relationship judgment specifically. Provider-agnostic by design: swapping providers is a config change, not a rewrite.
-
-- **API is synchronous, not a job queue.** Real per-document runtimes range from under a minute to several minutes, a tolerable HTTP wait for a local prototype. A background-job system is real added architecture the brief doesn't require; noted as the next step if this needed to scale.
-
-- **Storage mixes fixed columns with a flexible `attributes` JSON field.** Facts carry fixed grounding columns (page, quote, entity, metric, value, confidence) plus free-form attributes. Document-specific shapes (candidate value lists, historical-year series, prior-period comparisons) showed up without a schema migration, confirmed when the macro-economy dataset needed shapes the Delhivery dataset never used.
-
-- **API and UI are independently testable.** The Streamlit app calls the FastAPI backend over real HTTP, never importing pipeline code directly.
+- **Grounding enforced twice.** Extraction uses explicit `<<<PAGE N>>>` markers plus a required contiguous `source_quote`; a mandatory post-hoc check (`verify_grounding.py`) force-demotes any fact whose quote doesn't match the page, regardless of stated confidence. Caught a real fabrication (see Limitations).
+- **Cross-document matching only.** Same-document wording overlap isn't a cross-document relationship: including it risked the judgment model manufacturing a corroboration/contradiction out of an extraction artifact.
+- **Low-confidence facts excluded from matching.** Facts with `skip_reason` or confidence below 0.5 are surfaced but kept out of comparisons: positional guesses, not stated facts.
+- **Multi-provider, multi-key fallback.** Rotates Gemini models → Gemini keys → Groq (judgment only) to survive Gemini's free-tier quota (~20 req/day/model). Swapping providers is a config change, not a rewrite.
+- **Synchronous API, no job queue.** Real ingest runtimes (under a minute to several minutes) are an acceptable wait for a local prototype; a job queue is scoped out, see Next Steps.
+- **Fixed columns + flexible `attributes` JSON.** Document-specific shapes (candidate lists, historical series) show up without a schema migration.
+- **API and UI are independently testable.** Streamlit calls FastAPI over real HTTP, never imports pipeline code directly.
 
 ### Trade-offs
 
-- Fixed grounding fields plus a flexible JSON bag, instead of a fully dynamic schema: predictability over generality.
-- Brute-force numpy cosine similarity instead of a vector database: fine at hundreds of facts, would need revisiting at tens of thousands.
-- Relationship judgment bounded by a similarity threshold (0.85) rather than judging every candidate above a low bar: a low threshold (0.5) produced over 4,000 candidate pairs on the macro dataset alone, not judgeable within any reasonable API quota.
+- Fixed fields + JSON bag over a fully dynamic schema: predictability over generality.
+- Brute-force numpy cosine similarity over a vector DB: fine at hundreds of facts, not tens of thousands.
+- Relationship judgment gated at similarity ≥ 0.85, not a lower bar: 0.5 produced 4,000+ candidate pairs on the macro dataset alone, unjudgeable within any free-tier quota.
 
 ### AI tools used
 
-Built with Claude Code end to end: extraction pipeline, embedding and matching, relationship judgment, FastAPI, Streamlit UI, tests, and this README. The workflow was iterative: build, manually verify against real PDF pages, report the discrepancy, fix the root cause. A few concrete examples:
+Built with Claude Code end to end (pipeline, FastAPI, Streamlit, tests, README), iterating by building, checking against real PDF pages, and fixing root causes:
 
-- The grounding safety net exists because manual checking of the first extraction pass found facts with wrong page numbers and reconstructed, non-contiguous quotes. The fix was explicit page markers in the prompt plus a code-level verification pass.
-- The post-hoc verification pass exists because a second round of checking found facts that passed the first fix but were still stated at full confidence with fabricated quotes. A model's self-reported confidence can't be trusted for this category of error.
-- The relationship-judgment prompt got a targeted fix (don't invent certainty labels like "projection" or "estimate" unless the source quote states one) that worked for one document pair and failed for another on the same category of error. Documented as a known, unresolved limitation instead of re-attempted indefinitely.
-- Gemini Flash models handle extraction and primary relationship judgment. Groq (`openai/gpt-oss-120b`, after the originally planned `llama-3.3-70b-versatile` was deprecated mid-project) is the judgment fallback. `sentence-transformers` (`all-MiniLM-L6-v2`) runs locally for embeddings, no API calls.
+- Manual checks on the first extraction pass found wrong page numbers and reconstructed quotes → explicit page markers plus a code-level grounding check.
+- A second check found facts still fabricated at full stated confidence → the mandatory post-hoc verification pass now catches these (confidence alone isn't trustworthy).
+- A fix banning invented certainty labels ("projection") in relationship judgment worked for one document pair, not another; logged as an open limitation in `backend/relate.py` rather than re-attempted indefinitely.
+- Gemini Flash handles extraction and primary judgment; Groq (`openai/gpt-oss-120b`, after `llama-3.3-70b-versatile` was deprecated mid-project) is the judgment fallback; `sentence-transformers` (`all-MiniLM-L6-v2`) runs embeddings locally.
 
 ## Limitations and Next Steps
 
-Real findings from testing against actual PDF content. Case 4 of the required demo cases is built from this list.
+Real findings from testing against actual PDF content; Case 4 of the demo is drawn from this list.
 
 **Confirmed extraction failures:**
 
-- A genuine fabrication: the extraction model stated a specific, fully-confident bond yield ("10-year G-sec yield closed at 6.75%, a decline of 26 bps") that doesn't appear anywhere in the source. The real page states 7.01% / 5bps. The post-hoc safety net caught and demoted it; confidence alone would not have.
-- Duplicate restatement, not deduplicated: the same statistic ("12,104 employees trained") is correctly extracted from three sections of one document, since the report genuinely restates it. The system doesn't merge these into one fact yet.
-- Currency-symbol encoding varies by PDF font, sometimes within the same document: the rupee sign has rendered as three different mangled characters across the two datasets used here. Caught by the grounding check, not specially handled.
-- Sentences that span a page break can get attributed to the wrong page, or have a quote stitched from both sides of the break. Caught, not fully prevented.
+- Fabrication: extraction stated a bond yield ("10-year G-sec yield closed at 6.75%, a decline of 26 bps") absent from the source (real page: 7.01% / 5bps). Caught and demoted by the post-hoc check; confidence alone would not have caught it.
+- Duplicate restatement: the same statistic ("12,104 employees trained") is correctly extracted from three sections of one document but not yet merged into one fact.
+- Currency-symbol encoding varies by PDF font: the rupee sign rendered as three different mangled characters across the two datasets used. Caught by grounding, not specially handled.
+- Sentences spanning a page break can be attributed to the wrong page or stitched from both sides. Caught, not fully prevented.
 
-**A known, unresolved reasoning limitation:**
+**Known, unresolved reasoning limitation:**
 
-- The relationship-judgment model has repeatedly mischaracterized a stated-but-unqualified IMF figure as "a projection" when no such word appears in its source quote, even after an explicit prompt instruction forbidding invented certainty labels. The fix worked for one document pair and not another on the same category of error. Logged in `backend/relate.py` for anyone continuing this work.
-- The schema records what period a fact forecasts (`time_period`) but not when the forecast was made. A contradiction between an older and a newer forecast for the same period can look like a genuine disagreement when it's a timing artifact, found in exactly this shape between an Economic Survey citation and an IMF report. Next step: a `forecast_vintage` field, populated at least for forward-looking language, with relationship judgment given access to it.
+- The relationship-judgment model has repeatedly mislabeled a stated-but-unqualified IMF figure as "a projection" despite an explicit prompt ban on invented certainty labels; fixed for one document pair, not another. Logged in `backend/relate.py`.
+- `time_period` records what a forecast is *for*, not *when it was made*: an older vs. newer forecast for the same period can misread as a contradiction rather than a timing artifact (seen between an Economic Survey citation and an IMF report). Next step: a `forecast_vintage` field.
 
-**Accepted for this scope:**
+**Accepted for this scope:** synchronous ingest (minutes on large PDFs); brute-force cosine similarity (fine at hundreds of facts); no auth, multi-tenancy, or persistence beyond local SQLite/JSON.
 
-- Ingest is synchronous; a 100-page PDF ties up the request for several minutes. Would need a job queue for anything serving multiple users.
-- Candidate matching is brute-force cosine similarity over all stored embeddings, fine at hundreds of facts.
-- No authentication, no multi-tenancy, no persistence beyond local SQLite/JSON files.
-
-**Next steps:**
-
-1. `forecast_vintage` field, with judgment access to it.
-2. Cross-mention deduplication within a document.
-3. Background job queue for ingest, with a status-polling endpoint.
-4. Footnote-to-fact linking during extraction.
+**Next steps:** `forecast_vintage` field · cross-mention deduplication within a document · background job queue for ingest · footnote-to-fact linking.
 
 ## Additional Notes
 
-Generalization was tested, not just claimed. The same pipeline, with zero code changes, ran against three India-macroeconomy PDFs (Economic Survey, RBI Annual Report, IMF Article IV), a domain with no overlap with the Delhivery starter documents. About 95% of facts passed grounding verification across all three, and the run produced the project's actual case-2 and case-3 evidence.
+Generalization was tested, not just claimed: the same pipeline, unmodified, ran against three India-macroeconomy PDFs (Economic Survey, RBI Annual Report, IMF Article IV) with no domain overlap with the Delhivery starter documents. About 95% of facts passed grounding verification, and the run produced the actual case-2 and case-3 evidence below.
 
-All 4 required cases are live in the committed data:
+All 4 required cases, live in the committed data:
 
-- Corroboration: Delhivery revenue, Rs 8,142 Cr (Q4 deck) vs Rs 81,415M (annual report).
-- Contradiction: India headline inflation forecast for FY26, 4.2% (Economic Survey, citing RBI) vs 2.8% (IMF).
-- Reconciled via context: India real GDP growth, 6.4% (Economic Survey, First Advance Estimate) vs 6.5% (RBI/IMF), verified independently as a real government estimate revision.
-- Honest failure: see Limitations.
+1. **Corroboration**: Delhivery revenue, ₹8,142 Cr (Q4 deck) vs ₹81,415M (annual report).
+2. **Contradiction**: India FY26 headline inflation forecast, 4.2% (Economic Survey, citing RBI) vs 2.8% (IMF).
+3. **Reconciled via context**: India real GDP growth, 6.4% (Economic Survey, First Advance Estimate) vs 6.5% (RBI/IMF), a genuine government estimate revision verified independently.
+4. **Honest failure**: see Limitations.

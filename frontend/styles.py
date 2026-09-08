@@ -122,13 +122,19 @@ def inject_base_styles() -> str:
     }}
 
     /* Streamlit paints several text elements from its own theme; pin them to
-       ink so nothing drifts to a default grey-blue. */
-    [data-testid="stMain"] [data-testid="stMarkdownContainer"],
-    [data-testid="stMain"] [data-testid="stMarkdownContainer"] p,
+       ink so nothing drifts to a default grey-blue. Button labels are excluded
+       -- they live inside a stMarkdownContainer too, but need to follow the
+       button's own background (surface text on an ink-filled primary button),
+       not this blanket rule. */
+    [data-testid="stMain"] [data-testid="stMarkdownContainer"]:not(button *),
+    [data-testid="stMain"] [data-testid="stMarkdownContainer"] p:not(button *),
     [data-testid="stMain"] [data-testid="stMarkdownContainer"] li,
     [data-testid="stMain"] [data-testid="stHeading"],
     [data-testid="stMain"] [data-testid="stWidgetLabel"] p {{
         color: var(--ink);
+    }}
+    [data-testid^="stBaseButton"] [data-testid="stMarkdownContainer"] p {{
+        color: inherit;
     }}
 
     [data-testid="stHeader"] {{ background: transparent; }}

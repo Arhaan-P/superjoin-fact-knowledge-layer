@@ -1,5 +1,6 @@
-fastapi
+fastapi>=0.115.0
 uvicorn
+python-multipart
 streamlit
 pymupdf
 google-genai

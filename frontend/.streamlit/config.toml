@@ -1,7 +1,15 @@
+# Streamlit's own theme tokens, which drive the widget internals CSS cannot
+# reach (slider thumb, radio dot, focus rings). primaryColor is deliberately
+# ink, not a brand hue: in this app a color always means something about the
+# evidence, so no control is allowed to invent one. These values mirror the
+# tokens at the top of frontend/styles.py -- change both together.
 [theme]
 base = "light"
-primaryColor = "#7A4A9E"
-backgroundColor = "#EAE8E1"
-secondaryBackgroundColor = "#F5F3EC"
-textColor = "#1B1E22"
+primaryColor = "#1D2321"
+backgroundColor = "#F1F2F0"
+secondaryBackgroundColor = "#FBFBFA"
+textColor = "#1D2321"
 font = "sans serif"
+
+[client]
+toolbarMode = "minimal"

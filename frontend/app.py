@@ -6,15 +6,19 @@ testable. Run the backend first (uvicorn backend.main:app --port 8000), then:
     streamlit run frontend/app.py
 """
 
+import html
+
 import requests
 import streamlit as st
 
 import api_client
 from styles import (
-    RELATION_COLORS,
     RELATION_LABELS,
     confidence_badge,
+    evidence_meta,
     inject_base_styles,
+    loading_bar,
+    quote,
     relation_badge,
 )
 
@@ -22,13 +26,28 @@ st.set_page_config(page_title="Fact Knowledge Layer", layout="wide")
 st.markdown(inject_base_styles(), unsafe_allow_html=True)
 
 MAX_ROWS_SHOWN = 150
+FACT_COLUMNS = [2.3, 2.5, 1.4, 1.0, 0.7, 1.3, 1.1]
+EM_DASH = "—"
+
+
+def _write(markup: str) -> None:
+    st.markdown(markup, unsafe_allow_html=True)
+
+
+def _cell(text: str, *, numeric: bool = False, dim: bool = False) -> str:
+    classes = "fkl-cell"
+    if numeric:
+        classes += " fkl-num"
+    if dim:
+        classes += " fkl-dim"
+    return f'<div class="{classes}">{html.escape(str(text))}</div>'
 
 
 def _masthead() -> None:
     st.sidebar.markdown(
-        '<div class="masthead">Fact Knowledge Layer</div>'
-        '<div class="masthead-sub">grounded facts &middot; cross-document relationships</div>'
-        '<div style="height:18px"></div>',
+        '<div class="fkl-mark">Fact Knowledge Layer</div>'
+        '<div class="fkl-mark-sub">Grounded facts and the relationships between them, '
+        'read straight out of the source PDFs.</div>',
         unsafe_allow_html=True,
     )
 
@@ -40,18 +59,64 @@ def _short_doc_label(document_id: str) -> str:
     return parts[1] if len(parts) == 2 and parts[0].isdigit() else document_id
 
 
-def _facts_view() -> None:
+def _fetch(loader_label: str, call):
+    """Every network wait in the app shows the same hairline indicator, then
+    clears it. Returns None and renders the failure in place if the API is down."""
+    slot = st.empty()
+    slot.markdown(loading_bar(loader_label), unsafe_allow_html=True)
     try:
-        all_facts = api_client.get_facts()["facts"]
+        result = call()
     except requests.exceptions.RequestException as e:
-        st.error(f"Could not reach the API at {api_client.API_BASE_URL}: {e}")
+        slot.empty()
+        st.error(
+            f"Cannot reach the API at {api_client.API_BASE_URL}. "
+            f"Start it with `uvicorn backend.main:app --port 8000`, then reload. ({e})"
+        )
+        return None
+    slot.empty()
+    return result
+
+
+def _evidence_panel(fact: dict) -> None:
+    """Provenance, then the quote it came from, then any caveat. Rendered as one
+    markup block so the reveal animates as a single object."""
+    parts = [
+        '<div class="fkl-evidence">',
+        evidence_meta(html.escape(_short_doc_label(fact["document_id"])), fact["page_number"]),
+        quote(html.escape(fact["source_quote"])),
+    ]
+    if fact.get("skip_reason"):
+        parts.append(
+            f'<div class="fkl-note">Not fully grounded: {html.escape(fact["skip_reason"])}</div>'
+        )
+        candidates = (fact.get("attributes") or {}).get("candidate_values")
+        if candidates:
+            joined = ", ".join(html.escape(str(c)) for c in candidates)
+            parts.append(f'<div class="fkl-aside">Values seen on this page: {joined}</div>')
+    elif fact.get("attributes"):
+        parts.append(
+            f'<div class="fkl-aside">Attributes: {html.escape(str(fact["attributes"]))}</div>'
+        )
+    parts.append("</div>")
+    _write("".join(parts))
+
+
+def _facts_view() -> None:
+    _write(
+        '<div class="fkl-lede">Every row was read off a page of a source document and '
+        'keeps the quote it came from. Open the evidence to see it.</div>'
+    )
+
+    payload = _fetch("Loading facts", api_client.get_facts)
+    if payload is None:
         return
+    all_facts = payload["facts"]
 
     document_ids = sorted({f["document_id"] for f in all_facts})
 
-    col1, col2, col3 = st.columns([3, 2, 2])
+    col1, col2, col3 = st.columns([3, 2, 2], gap="large")
     with col1:
-        search = st.text_input("Search entity or metric", placeholder="e.g. GDP, revenue, inflation")
+        search = st.text_input("Search entity or metric", placeholder="GDP, revenue, inflation")
     with col2:
         doc_filter = st.selectbox("Document", ["All documents"] + document_ids)
     with col3:
@@ -69,77 +134,101 @@ def _facts_view() -> None:
         ]
     facts = [f for f in facts if f.get("confidence", 0) >= min_confidence]
 
-    unverified_count = sum(1 for f in facts if f.get("skip_reason"))
-    st.caption(
-        f"{len(facts)} fact(s) matching &middot; {unverified_count} flagged unverified "
-        f"(low confidence or partial grounding)".replace("&middot;", "·")
-    )
+    if not facts:
+        _write(
+            '<div class="fkl-count">No facts match these filters. '
+            'Clear the search or lower the confidence floor.</div>'
+        )
+        return
 
     shown = facts[:MAX_ROWS_SHOWN]
+    unverified_count = sum(1 for f in facts if f.get("skip_reason"))
+    noun = "fact" if len(facts) == 1 else "facts"
+    summary = f"{len(facts)} {noun}, {unverified_count} flagged unverified"
     if len(facts) > MAX_ROWS_SHOWN:
-        st.info(f"Showing the first {MAX_ROWS_SHOWN} of {len(facts)} matches -- narrow your search to see more.")
+        summary += f". Showing the first {MAX_ROWS_SHOWN} — narrow the search to see the rest"
+    _write(f'<div class="fkl-count">{summary}</div>')
 
     st.session_state.setdefault("expanded_facts", set())
 
-    header = st.columns([2.2, 2.4, 1.2, 1.2, 0.9, 1.8, 1])
-    for col, label in zip(header, ["Entity", "Metric", "Value", "Period", "Page", "Confidence", ""]):
-        col.markdown(f"**{label}**")
+    header = st.columns(FACT_COLUMNS, gap="medium")
+    labels = ["Entity", "Metric", "Value", "Period", "Page", "Confidence", ""]
+    for col, label in zip(header, labels):
+        col.markdown(f'<div class="fkl-th">{label}</div>', unsafe_allow_html=True)
+    _write('<div class="fkl-rule"></div>')
 
     for fact in shown:
-        cols = st.columns([2.2, 2.4, 1.2, 1.2, 0.9, 1.8, 1])
-        cols[0].write(fact.get("entity") or "—")
-        cols[1].write(fact.get("metric") or "—")
+        is_open = fact["fact_id"] in st.session_state["expanded_facts"]
+        cols = st.columns(FACT_COLUMNS, gap="medium")
+        cols[0].markdown(_cell(fact.get("entity") or EM_DASH), unsafe_allow_html=True)
+        cols[1].markdown(_cell(fact.get("metric") or EM_DASH), unsafe_allow_html=True)
         value_str = f"{fact.get('value')} {fact.get('unit') or ''}".strip()
-        cols[2].markdown(f"<span style='font-family:\"IBM Plex Mono\",monospace'>{value_str}</span>", unsafe_allow_html=True)
-        cols[3].write(fact.get("time_period") or "—")
-        cols[4].markdown(f"<span style='font-family:\"IBM Plex Mono\",monospace'>{fact['page_number']}</span>", unsafe_allow_html=True)
-        cols[5].markdown(confidence_badge(fact.get("confidence", 0), fact.get("skip_reason")), unsafe_allow_html=True)
-        if cols[6].button("Evidence", key=f"toggle_{fact['fact_id']}"):
+        cols[2].markdown(_cell(value_str, numeric=True), unsafe_allow_html=True)
+        cols[3].markdown(_cell(fact.get("time_period") or EM_DASH, dim=True), unsafe_allow_html=True)
+        cols[4].markdown(_cell(fact["page_number"], numeric=True), unsafe_allow_html=True)
+        cols[5].markdown(
+            f'<div class="fkl-cell">'
+            f'{confidence_badge(fact.get("confidence", 0), fact.get("skip_reason"))}</div>',
+            unsafe_allow_html=True,
+        )
+        if cols[6].button(
+            "Hide" if is_open else "Evidence",
+            key=f"toggle_{fact['fact_id']}",
+            help="Show the page and quote this fact was read from",
+        ):
             expanded = st.session_state["expanded_facts"]
-            if fact["fact_id"] in expanded:
+            if is_open:
                 expanded.discard(fact["fact_id"])
             else:
                 expanded.add(fact["fact_id"])
+            st.rerun()
 
-        if fact["fact_id"] in st.session_state["expanded_facts"]:
-            with st.container():
-                st.markdown(
-                    f'<div class="evidence-meta">{_short_doc_label(fact["document_id"])} '
-                    f'&middot; page {fact["page_number"]}</div>'.replace("&middot;", "·"),
-                    unsafe_allow_html=True,
-                )
-                st.markdown(f'<div class="quote-block">“{fact["source_quote"]}”</div>', unsafe_allow_html=True)
-                if fact.get("skip_reason"):
-                    st.markdown(
-                        f'<div class="skip-reason-box">&#9888; Not fully grounded: {fact["skip_reason"]}</div>',
-                        unsafe_allow_html=True,
-                    )
-                    candidates = (fact.get("attributes") or {}).get("candidate_values")
-                    if candidates:
-                        st.caption(f"Raw candidate values seen on the page: {', '.join(candidates)}")
-                elif fact.get("attributes"):
-                    st.caption(f"Additional attributes: {fact['attributes']}")
-        st.markdown('<div class="fact-row"></div>', unsafe_allow_html=True)
+        if is_open:
+            _evidence_panel(fact)
+        _write('<div class="fkl-rule"></div>')
+
+
+def _fact_line(fact: dict) -> str:
+    """The extracted fact in one line, under the quote it was read from. The
+    entity is set in ink and the reading in tabular figures so the eye can
+    compare the two sides of a pair without re-reading the whole line."""
+    value = f"{fact.get('value')} {fact.get('unit') or ''}".strip()
+    return (
+        f'<div class="fkl-aside">'
+        f'<span class="fkl-aside-entity">{html.escape(str(fact.get("entity") or EM_DASH))}</span>, '
+        f'{html.escape(str(fact.get("metric") or EM_DASH))} '
+        f'<span class="fkl-num fkl-aside-value">{html.escape(value)}</span></div>'
+    )
 
 
 def _relationship_card(rel: dict) -> None:
-    fa, fb = rel["fact_a"], rel["fact_b"]
-    st.markdown(relation_badge(rel["relation"]), unsafe_allow_html=True)
-    left, right = st.columns(2)
-    for col, fact in [(left, fa), (right, fb)]:
+    """Verdict first, then the reasoning, then the two quotes it rests on. The
+    judgment is what the reader came for; the evidence is what backs it up."""
+    _write(relation_badge(rel["relation"]))
+    _write(f'<div class="fkl-verdict">{html.escape(rel["explanation"])}</div>')
+
+    left, right = st.columns(2, gap="large")
+    for col, side, fact in [(left, "Fact A", rel["fact_a"]), (right, "Fact B", rel["fact_b"])]:
         with col:
-            st.markdown(
-                f'<div class="evidence-meta">{_short_doc_label(fact["document_id"])} '
-                f'&middot; page {fact["page_number"]}</div>'.replace("&middot;", "·"),
-                unsafe_allow_html=True,
+            _write(
+                evidence_meta(
+                    html.escape(_short_doc_label(fact["document_id"])),
+                    fact["page_number"],
+                    side=side,
+                )
+                + quote(html.escape(fact["source_quote"]))
+                + _fact_line(fact)
             )
-            st.markdown(f'<div class="quote-block">“{fact["source_quote"]}”</div>', unsafe_allow_html=True)
-            st.caption(f"{fact.get('entity')} · {fact.get('metric')} = {fact.get('value')} {fact.get('unit') or ''}")
-    st.markdown(f"**Reasoning:** {rel['explanation']}")
-    st.markdown("<div class='fact-row'></div>", unsafe_allow_html=True)
+    _write('<div class="fkl-card-gap"></div><div class="fkl-rule"></div>'
+           '<div class="fkl-card-gap"></div>')
 
 
 def _relationships_view() -> None:
+    _write(
+        '<div class="fkl-lede">Facts from different documents, compared in pairs. Each '
+        'verdict below was judged against both quotes, which are shown underneath it.</div>'
+    )
+
     options = ["All"] + list(RELATION_LABELS.keys())
     choice = st.radio(
         "Filter by relationship",
@@ -149,72 +238,85 @@ def _relationships_view() -> None:
     )
     relation_param = None if choice == "All" else choice
 
-    try:
-        relationships = api_client.get_relationships(relation=relation_param)["relationships"]
-    except requests.exceptions.RequestException as e:
-        st.error(f"Could not reach the API at {api_client.API_BASE_URL}: {e}")
+    payload = _fetch(
+        "Loading relationships", lambda: api_client.get_relationships(relation=relation_param)
+    )
+    if payload is None:
+        return
+    relationships = payload["relationships"]
+
+    if not relationships:
+        _write('<div class="fkl-count">No relationships of this kind in the store yet.</div>')
         return
 
-    st.caption(f"{len(relationships)} relationship(s) found")
+    count = len(relationships)
+    _write(f'<div class="fkl-count">{count} judged pair{"" if count == 1 else "s"}</div>')
     for rel in relationships[:MAX_ROWS_SHOWN]:
         _relationship_card(rel)
 
 
+def _ingest_result(result: dict) -> None:
+    if result["status"] == "skipped":
+        st.warning(
+            f"'{result['document_id']}' is already in the store with "
+            f"{result['existing_fact_count']} facts. Ingestion is incremental and never "
+            f"reprocesses a document it has already read."
+        )
+        return
+
+    st.success(f"Added '{result['document_id']}' with {result['fact_count']} facts.")
+    _write(
+        f'<div class="fkl-aside">Model: {html.escape(str(result["model"]))}<br>'
+        f'Candidate pairs found against the existing store: '
+        f'<span class="fkl-num">{result["candidate_pairs_found"]}</span><br>'
+        f'Pairs judged: <span class="fkl-num">{result["relationships_judged"]}</span></div>'
+    )
+    if result["relationship_breakdown"]:
+        st.write(result["relationship_breakdown"])
+    st.info("Open Facts or Relationships in the sidebar to read the new data.")
+
+
 def _upload_view() -> None:
-    st.write(
-        "Upload a new PDF to add it to the knowledge layer. The 5 starter documents "
-        "are already ingested and judged -- this adds a document on top of them."
+    _write(
+        '<div class="fkl-lede">Drop in a PDF the system has never seen. It is parsed page '
+        'by page, grounded against its own quotes, then compared with everything already '
+        'in the store.</div>'
     )
     uploaded = st.file_uploader("Choose a PDF", type=["pdf"])
     if uploaded is None:
         return
-    if st.button("Ingest this document"):
-        with st.status("Ingesting document...", expanded=True) as status:
-            st.write("Sending to the API -- extraction, grounding, embedding, and relationship judgment can take a few minutes on a large PDF.")
-            try:
-                result = api_client.post_ingest(uploaded.name, uploaded.getvalue())
-            except requests.exceptions.RequestException as e:
-                status.update(label="Ingest failed", state="error")
-                st.error(f"Request to the API failed: {e}")
-                return
 
-            if result["status"] == "skipped":
-                status.update(label="Already ingested", state="complete")
-                st.warning(
-                    f"'{result['document_id']}' is already in the store "
-                    f"({result['existing_fact_count']} facts) -- incremental ingestion "
-                    f"never reprocesses an existing document."
-                )
-            else:
-                status.update(label="Ingest complete", state="complete")
-                st.success(f"Ingested '{result['document_id']}' — {result['fact_count']} facts extracted.")
-                st.write(f"Model used: `{result['model']}`")
-                st.write(f"Candidate pairs found against the existing store: {result['candidate_pairs_found']}")
-                st.write(f"Relationships judged: {result['relationships_judged']}")
-                if result["relationship_breakdown"]:
-                    st.write("Breakdown:", result["relationship_breakdown"])
-                st.info("Switch to Facts or Relationships in the sidebar to see the new data.")
+    if st.button("Ingest this document", type="primary"):
+        slot = st.empty()
+        slot.markdown(
+            loading_bar(
+                "Reading pages, extracting facts, embedding and comparing. "
+                "A large PDF can take a few minutes."
+            ),
+            unsafe_allow_html=True,
+        )
+        try:
+            result = api_client.post_ingest(uploaded.name, uploaded.getvalue())
+        except requests.exceptions.RequestException as e:
+            slot.empty()
+            st.error(f"Ingest failed before it finished: {e}")
+            return
+        slot.empty()
+        _ingest_result(result)
 
 
 def main() -> None:
     _masthead()
-    if not api_client.api_is_reachable():
-        st.error(
-            f"Cannot reach the API at {api_client.API_BASE_URL}. "
-            f"Start it first: `uvicorn backend.main:app --port 8000`"
-        )
-        return
-
     page = st.sidebar.radio("View", ["Facts", "Relationships", "Upload"], label_visibility="collapsed")
 
     if page == "Facts":
-        st.header("Facts")
+        st.title("Facts")
         _facts_view()
     elif page == "Relationships":
-        st.header("Relationships")
+        st.title("Relationships")
         _relationships_view()
     else:
-        st.header("Upload a document")
+        st.title("Add a document")
         _upload_view()
 
 

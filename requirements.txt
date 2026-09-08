@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+streamlit
+pymupdf
+google-genai
+python-dotenv
+sentence-transformers
+numpy
+pydantic
+pytest
+groq

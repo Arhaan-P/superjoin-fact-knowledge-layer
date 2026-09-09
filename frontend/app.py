@@ -255,6 +255,42 @@ def _relationships_view() -> None:
         _relationship_card(rel)
 
 
+def _progress_label(event: dict) -> str | None:
+    """Turns one backend progress event into the loading indicator's label. Returns
+    None for events that shouldn't change what the reader is looking at.
+
+    Deliberately reuses the single hairline rather than adding a progress widget:
+    the design system's rule is one loading signal everywhere, and the batch counter
+    already carries the "how far along" information a progress bar would."""
+    stage = event.get("stage")
+    if stage == "parsed":
+        resumed = event.get("already_done") or 0
+        base = (
+            f"Parsed {event['pages']} pages into {event['batches']} batches. "
+            "Extracting facts."
+        )
+        if resumed:
+            return base + f" Resuming: {resumed} batches were already done."
+        return base
+    if stage == "batch":
+        first, last = event["pages"]
+        return (
+            f"Extracting facts — batch {event['completed']} of {event['total']} "
+            f"(pages {first}–{last}). {event['facts_so_far']} facts so far."
+        )
+    if stage == "embedding":
+        return f"Embedding {event['fact_count']} facts."
+    if stage == "matching":
+        return f"Matching against {event['against']} facts already in the store."
+    if stage == "judging":
+        return (
+            f"Judging {event['to_judge']} of {event['candidate_pairs']} candidate pairs."
+        )
+    if stage == "judged":
+        return f"Judging relationships — {event['completed']} of {event['total']}."
+    return None
+
+
 def _ingest_result(result: dict) -> None:
     if result["status"] == "skipped":
         st.warning(
@@ -264,13 +300,39 @@ def _ingest_result(result: dict) -> None:
         )
         return
 
+    if result["status"] == "partial":
+        # Reported as partial rather than dressed up as success: the facts that were
+        # extracted are real and already saved, but the document was not fully read.
+        st.warning(
+            f"Read {result['batches_completed']} of {result['batches_total']} batches "
+            f"before the daily API quota ran out, and saved "
+            f"{result['fact_count']} facts from the pages covered. "
+            "Upload the same file again to resume from where it stopped."
+        )
+        _write(f'<div class="fkl-aside">{html.escape(str(result["reason"]))}</div>')
+        return
+
     st.success(f"Added '{result['document_id']}' with {result['fact_count']} facts.")
-    _write(
+    unjudged = result.get("relationships_unjudged", 0)
+    aside = (
         f'<div class="fkl-aside">Model: {html.escape(str(result["model"]))}<br>'
         f'Candidate pairs found against the existing store: '
         f'<span class="fkl-num">{result["candidate_pairs_found"]}</span><br>'
-        f'Pairs judged: <span class="fkl-num">{result["relationships_judged"]}</span></div>'
+        f'Pairs judged: <span class="fkl-num">{result["relationships_judged"]}</span>'
     )
+    if unjudged:
+        aside += (
+            f'<br>Not judged this run: <span class="fkl-num">{unjudged}</span> '
+            f'(budget {result.get("judgment_budget")} pairs per upload, highest '
+            f'similarity first)'
+        )
+    _write(aside + "</div>")
+    if result.get("judging_incomplete"):
+        st.warning(
+            "The facts are saved, but relationship judging stopped early: "
+            f"{result['judging_incomplete']}. Judgments already made are cached, so "
+            "the remaining pairs can be judged on a later run."
+        )
     if result["relationship_breakdown"]:
         st.write(result["relationship_breakdown"])
     st.info("Open Facts or Relationships in the sidebar to read the new data.")
@@ -288,18 +350,29 @@ def _upload_view() -> None:
 
     if st.button("Ingest this document", type="primary"):
         slot = st.empty()
-        slot.markdown(
-            loading_bar(
-                "Reading pages, extracting facts, embedding and comparing. "
-                "A large PDF can take a few minutes."
-            ),
-            unsafe_allow_html=True,
-        )
+
+        def show(label: str) -> None:
+            slot.markdown(loading_bar(label), unsafe_allow_html=True)
+
+        show("Uploading and parsing the document.")
+
+        def on_progress(event: dict) -> None:
+            label = _progress_label(event)
+            if label:
+                show(label)
+
         try:
-            result = api_client.post_ingest(uploaded.name, uploaded.getvalue())
-        except requests.exceptions.RequestException as e:
+            result = api_client.post_ingest(
+                uploaded.name, uploaded.getvalue(), on_progress=on_progress
+            )
+        except (requests.exceptions.RequestException, api_client.IngestError) as e:
             slot.empty()
             st.error(f"Ingest failed before it finished: {e}")
+            _write(
+                '<div class="fkl-aside">Any batches that finished before this point were '
+                'saved. Uploading the same file again resumes from there rather than '
+                'starting over.</div>'
+            )
             return
         slot.empty()
         _ingest_result(result)

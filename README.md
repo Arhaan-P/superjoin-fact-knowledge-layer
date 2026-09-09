@@ -70,6 +70,9 @@ PDF -> PyMuPDF (page-level text) -> Gemini (batched extraction, page markers)
 - Fixed fields + JSON bag over a fully dynamic schema: predictability over generality.
 - Brute-force numpy cosine similarity over a vector DB: fine at hundreds of facts, not tens of thousands.
 - Relationship judgment gated at similarity ≥ 0.85, not a lower bar: 0.5 produced 4,000+ candidate pairs on the macro dataset alone, unjudgeable within any free-tier quota.
+- Ingest streams NDJSON progress and checkpoints per batch instead of one blocking request: adds a background thread, a queue, and an on-disk partial-run file that a plain synchronous endpoint wouldn't need. Necessary once documents got large enough that a single HTTP request could not cover the work (see Additional Notes).
+- Extraction parallelizes across configured API keys (one worker per key), not within a key: an 8-way burst on one key returned 429 on all 8 immediately when measured, so the free-tier win comes from using separate quota buckets concurrently, not from raw concurrency.
+- Judgment retries honor the API's own `retryDelay` instead of a fixed exponential backoff: against a 5-requests-per-minute cap, guessing a shorter wait just burns the next window's budget on doomed retries.
 
 ### AI tools used
 
@@ -96,9 +99,9 @@ Real findings from testing against actual PDF content; Case 4 of the demo is dra
 - The relationship-judgment model has repeatedly mislabeled a stated-but-unqualified IMF figure as "a projection" despite an explicit prompt ban on invented certainty labels; fixed for one document pair, not another. Logged in `backend/relate.py`.
 - `time_period` records what a forecast is *for*, not *when it was made*: an older vs. newer forecast for the same period can misread as a contradiction rather than a timing artifact (seen between an Economic Survey citation and an IMF report). Next step: a `forecast_vintage` field.
 
-**Accepted for this scope:** synchronous ingest (minutes on large PDFs); brute-force cosine similarity (fine at hundreds of facts); no auth, multi-tenancy, or persistence beyond local SQLite/JSON.
+**Accepted for this scope:** streamed but still single-worker-per-key ingest (minutes on large PDFs, see Additional Notes); brute-force cosine similarity (fine at hundreds of facts); no auth, multi-tenancy, or persistence beyond local SQLite/JSON; no automatic resume of relationship judgment for a document that finished extraction but stopped early on judging (a document already fully ingested is reported "skipped" by `/ingest`, so finishing its judging today needs a one-off script rather than a re-upload).
 
-**Next steps:** `forecast_vintage` field · cross-mention deduplication within a document · background job queue for ingest · footnote-to-fact linking.
+**Next steps:** `forecast_vintage` field · cross-mention deduplication within a document · true background job queue (a worker process independent of the HTTP request, vs. today's request-scoped thread) · footnote-to-fact linking · an endpoint to resume judging for an already-ingested document.
 
 ## Additional Notes
 
@@ -110,3 +113,15 @@ All 4 required cases, live in the committed data:
 2. **Contradiction**: India FY26 headline inflation forecast, 4.2% (Economic Survey, citing RBI) vs 2.8% (IMF).
 3. **Reconciled via context**: India real GDP growth, 6.4% (Economic Survey, First Advance Estimate) vs 6.5% (RBI/IMF), a genuine government estimate revision verified independently.
 4. **Honest failure**: see Limitations.
+
+**Heavy-PDF stress test.** Ingested a real 383-page annual report (Blue Dart Express FY24-25, ~10MB, not part of the starter dataset) end to end through the live API:
+
+- Worked. 669 facts extracted across 48 batches, matched against the existing 986-fact store, 136 relationships now live.
+- Found a real bug doing this: the old synchronous `/ingest` returned one response at the end, so a 48-call document (~34 min) blew past the client's 600s timeout and saved zero facts, no matter how far extraction had actually gotten.
+- Fix: `/ingest` now streams NDJSON progress and checkpoints facts to disk per batch. A timeout, disconnect, or daily-quota wall now leaves a resumable partial result instead of losing the run.
+- Found a second, related bug: judgment's retry logic used fixed exponential backoff instead of respecting the API's own `retryDelay`, so it could 429 itself unnecessarily under the free tier's ~5 req/min cap. Fixed to honor the server's advised wait.
+
+Trade-offs this exposed:
+
+- The free tier's real ceiling (~5 req/min/key/model) is tighter than assumed at build start (~10 to 15/min). A 48-batch document takes ~16 minutes even parallelized across 4 keys; fewer keys means proportionally longer, not a failure.
+- Judgment can outrun a single day's remaining quota on a large document (37 pairs here needed two follow-up runs). Facts and judgments persist independently, so nothing is lost, but some pairs can sit unjudged until quota resets or judging is re-run (see Next Steps).

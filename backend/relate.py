@@ -18,7 +18,7 @@ from google.genai import types
 from google.genai.errors import ClientError, ServerError
 
 from backend import config
-from backend.extract import _is_daily_quota_exhausted, _is_retryable
+from backend.extract import _is_daily_quota_exhausted, _is_retryable, _retry_delay_seconds
 from backend.schema import RelationshipJudgment
 
 SYSTEM_INSTRUCTION = """You are a fact-relationship judge for a cross-document fact-checking tool.
@@ -126,8 +126,12 @@ def _call_gemini(client: genai.Client, model: str, prompt: str) -> RelationshipJ
             if _is_daily_quota_exhausted(e):
                 raise
             if _is_retryable(e) and attempt < config.MAX_RETRIES - 1:
-                sleep_s = min(60, 2**attempt)
-                time.sleep(sleep_s)
+                # Same rule as extraction: wait at least as long as the server asked.
+                # Judgment fires many small calls in a row, so against the free tier's
+                # 5-requests-per-minute cap a 1s exponential backoff just spends the
+                # next window's budget on retries that cannot succeed yet.
+                advised = _retry_delay_seconds(e) or 0.0
+                time.sleep(max(advised, min(60, 2**attempt)))
                 continue
             raise
     raise RuntimeError(f"Gemini judgment failed after {config.MAX_RETRIES} retries") from last_error

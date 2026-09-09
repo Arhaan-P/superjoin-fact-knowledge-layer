@@ -87,7 +87,9 @@ def test_fabricated_fact_is_demoted_by_the_real_pipeline(monkeypatch, tmp_path, 
 
     # The real pipeline entry point -- same one main() calls -- with only the
     # Gemini client swapped for a stub.
-    result = run_ingest(PDF_PATH, client=fake_client)
+    # facts_dir is isolated deliberately: run_ingest checkpoints and finalizes to
+    # disk now, and the default location is the real fact store.
+    result = run_ingest(PDF_PATH, client=fake_client, facts_dir=tmp_path / "facts")
     assert fake_client.models.call_count == 1
 
     output_path = tmp_path / "facts.json"

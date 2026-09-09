@@ -55,4 +55,12 @@ GROQ_MODEL = os.environ.get("GROQ_MODEL", "openai/gpt-oss-120b")
 _groq_key_fallbacks_raw = os.environ.get("GROQ_API_KEY_FALLBACKS", "")
 GROQ_API_KEY_FALLBACKS = [k.strip() for k in _groq_key_fallbacks_raw.split(",") if k.strip()]
 
+# Upper bound on relationship-judgment LLM calls for a single ingest. Candidate
+# pairs scale with (new facts x existing facts): a 383-page report contributes
+# ~1,500 facts against a store of ~900, which can surface far more promising pairs
+# than the free tier's 20 requests/day/model could ever judge. The highest-scoring
+# pairs are judged first and the rest are reported as unjudged rather than silently
+# dropped, so one large upload cannot consume an entire day's quota.
+INGEST_MAX_JUDGED_PAIRS = int(os.environ.get("INGEST_MAX_JUDGED_PAIRS", "40"))
+
 RELATIONSHIPS_DB_PATH = os.environ.get("RELATIONSHIPS_DB_PATH", "storage/relationships.db")

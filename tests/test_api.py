@@ -1,7 +1,8 @@
 """Integration check for the FastAPI layer: does POST /ingest actually drive the
 real pipeline (extract -> grounding safety net -> embed -> cross-document match ->
 relationship judgment) for a genuinely new document, not just return a
-plausible-looking response?
+plausible-looking response? The endpoint streams NDJSON progress now, so these
+also pin that the stream's final line carries the real result.
 
 Stubs only the Gemini call site (same pattern as
 tests/test_extraction_grounding.py) so no network access or API key is needed, and
@@ -47,6 +48,16 @@ def _make_fake_pdf(path, text: str) -> None:
     doc.close()
 
 
+
+def _final_event(response) -> dict:
+    """POST /ingest streams NDJSON; the last non-heartbeat line is the result.
+    The progress lines before it are what stop a long ingest tripping a client
+    read timeout, which is the failure these tests exist to guard against."""
+    events = [json.loads(line) for line in response.text.splitlines() if line.strip()]
+    assert events, "ingest stream produced no events"
+    return events[-1]
+
+
 @pytest.fixture
 def fake_pdf(tmp_path):
     path = tmp_path / "test-synthetic-report.pdf"
@@ -84,7 +95,7 @@ def test_ingest_new_document_runs_the_real_pipeline_end_to_end(monkeypatch, tmp_
         )
 
     assert response.status_code == 200
-    body = response.json()
+    body = _final_event(response)
     assert body["status"] == "ingested"
     assert body["document_id"] == "test-synthetic-report"
     assert body["fact_count"] == 1
@@ -117,6 +128,6 @@ def test_ingest_skips_document_already_in_the_store(monkeypatch, tmp_path):
         )
 
     assert response.status_code == 200
-    body = response.json()
+    body = _final_event(response)
     assert body["status"] == "skipped"
     assert body["existing_fact_count"] == 64

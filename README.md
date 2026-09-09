@@ -36,7 +36,7 @@ streamlit run frontend/app.py
 
 Open the URL Streamlit prints (usually `http://localhost:8501`). The Facts and Relationships views load the committed data immediately.
 
-To ingest a new PDF: copy `.env.example` to `.env`, fill in `GEMINI_API_KEY` (free tier via [Google AI Studio](https://aistudio.google.com/apikey)), then use the Upload tab or `POST /ingest` directly. Optional: `GROQ_API_KEY` (free via [console.groq.com](https://console.groq.com)) as a fallback for relationship judgment if Gemini's daily quota runs out. Ingest is synchronous and can take several minutes on a large PDF; see Approach for why.
+To ingest a new PDF: copy `.env.example` to `.env`, fill in `GEMINI_API_KEY` (free tier via [Google AI Studio](https://aistudio.google.com/apikey)), then use the Upload tab or `POST /ingest` directly. Optional: `GROQ_API_KEY` (free via [console.groq.com](https://console.groq.com)) as a fallback for relationship judgment if Gemini's daily quota runs out. `POST /ingest` streams NDJSON progress per batch and can take a few minutes on a large PDF; if it's ever interrupted (network drop, closed tab, daily quota), the same file can be re-uploaded and resumes from the last completed batch instead of starting over. See Approach for why.
 
 ## Video Demo
 
@@ -61,7 +61,7 @@ PDF -> PyMuPDF (page-level text) -> Gemini (batched extraction, page markers)
 - **Cross-document matching only.** Same-document wording overlap isn't a cross-document relationship: including it risked the judgment model manufacturing a corroboration/contradiction out of an extraction artifact.
 - **Low-confidence facts excluded from matching.** Facts with `skip_reason` or confidence below 0.5 are surfaced but kept out of comparisons: positional guesses, not stated facts.
 - **Multi-provider, multi-key fallback.** Rotates Gemini models → Gemini keys → Groq (judgment only) to survive Gemini's free-tier quota (~20 req/day/model). Swapping providers is a config change, not a rewrite.
-- **Synchronous API, no job queue.** Real ingest runtimes (under a minute to several minutes) are an acceptable wait for a local prototype; a job queue is scoped out, see Next Steps.
+- **Streaming, checkpointed ingest; no separate job-queue process.** `POST /ingest` streams NDJSON progress and checkpoints extracted facts to disk per batch, so a large document (minutes of real work) never depends on one request completing in a single window and can resume after an interruption. Still request-scoped (the work runs on a thread inside the HTTP request, not a separate worker process you could poll after closing the client) — a true background job queue is scoped out, see Next Steps.
 - **Fixed columns + flexible `attributes` JSON.** Document-specific shapes (candidate lists, historical series) show up without a schema migration.
 - **API and UI are independently testable.** Streamlit calls FastAPI over real HTTP, never imports pipeline code directly.
 

@@ -61,7 +61,7 @@ PDF -> PyMuPDF (page-level text) -> Gemini (batched extraction, page markers)
 - **Cross-document matching only.** Same-document wording overlap isn't a cross-document relationship: including it risked the judgment model manufacturing a corroboration/contradiction out of an extraction artifact.
 - **Low-confidence facts excluded from matching.** Facts with `skip_reason` or confidence below 0.5 are surfaced but kept out of comparisons: positional guesses, not stated facts.
 - **Multi-provider, multi-key fallback.** Rotates Gemini models → Gemini keys → Groq (judgment only) to survive Gemini's free-tier quota (~20 req/day/model). Swapping providers is a config change, not a rewrite.
-- **Streaming, checkpointed ingest; no separate job-queue process.** `POST /ingest` streams NDJSON progress and checkpoints extracted facts to disk per batch, so a large document (minutes of real work) never depends on one request completing in a single window and can resume after an interruption. Still request-scoped (the work runs on a thread inside the HTTP request, not a separate worker process you could poll after closing the client) — a true background job queue is scoped out, see Next Steps.
+- **Streaming, checkpointed ingest; no separate job-queue process.** `POST /ingest` streams NDJSON progress and checkpoints extracted facts to disk per batch, so a large document (minutes of real work) never depends on one request completing in a single window and can resume after an interruption. Still request-scoped (the work runs on a thread inside the HTTP request, not a separate worker process you could poll after closing the client): a true background job queue is scoped out, see Next Steps.
 - **Fixed columns + flexible `attributes` JSON.** Document-specific shapes (candidate lists, historical series) show up without a schema migration.
 - **API and UI are independently testable.** Streamlit calls FastAPI over real HTTP, never imports pipeline code directly.
 
@@ -113,6 +113,13 @@ All 4 required cases, live in the committed data:
 2. **Contradiction**: India FY26 headline inflation forecast, 4.2% (Economic Survey, citing RBI) vs 2.8% (IMF).
 3. **Reconciled via context**: India real GDP growth, 6.4% (Economic Survey, First Advance Estimate) vs 6.5% (RBI/IMF), a genuine government estimate revision verified independently.
 4. **Honest failure**: see Limitations.
+
+**Brownie points attempted:**
+
+- **Large PDFs without performance issues**: streamed, checkpointed, per-key-parallel ingest (see Heavy-PDF stress test below); a 383-page PDF that used to lose all its work now completes reliably.
+- **Many PDFs in one knowledge layer**: 6 documents, 2 unrelated domains (logistics + macroeconomy), cross-document matching runs against the whole store.
+- **Schema that evolves dynamically**: fixed grounding columns + a flexible `attributes` JSON bag folded into embeddings, so document-specific fact shapes surface without a migration (not a fully schemaless rewrite; see trade-off in Approach).
+- **Incremental new documents**: `document_id` already in the store short-circuits `/ingest` with zero API calls; a new document is only ever compared against what's already there, never reprocessed.
 
 **Heavy-PDF stress test.** Ingested a real 383-page annual report (Blue Dart Express FY24-25, ~10MB, not part of the starter dataset) end to end through the live API:
 
